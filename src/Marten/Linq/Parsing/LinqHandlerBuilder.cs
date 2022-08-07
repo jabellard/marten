@@ -44,6 +44,28 @@ namespace Marten.Linq.Parsing
                 ? MartenQueryParser.TransformQueryFlyweight.GetParsedQuery(expression)
                 : MartenQueryParser.Flyweight.GetParsedQuery(expression);
 
+            var orderByClause = Model.BodyClauses
+                .OfType<OrderByClause>()
+                .FirstOrDefault();
+            if (orderByClause != null)
+            {
+                foreach (var ordering in orderByClause.Orderings)
+                {
+                    var orderingExpression = ordering.Expression;
+                    if (orderingExpression is ConditionalExpression conditionalExpression)
+                    {
+                        if (conditionalExpression.IfTrue is MemberExpression memberExpressionFromTrue)
+                        {
+                            ordering.Expression = memberExpressionFromTrue;
+                        }
+                        else if (conditionalExpression.IfTrue is MemberExpression memberExpressionFromFalse)
+                        {
+                            ordering.Expression = memberExpressionFromFalse;
+                        }
+                    }
+                }
+            }
+
             if (additionalOperator != null) Model.ResultOperators.Add(additionalOperator);
 
             _documentType = Model.MainFromClause.ItemType;
