@@ -58,7 +58,7 @@ namespace Marten.Linq.Parsing
                         {
                             ordering.Expression = memberExpressionFromTrue;
                         }
-                        else if (conditionalExpression.IfTrue is MemberExpression memberExpressionFromFalse)
+                        else if (conditionalExpression.IfFalse is MemberExpression memberExpressionFromFalse)
                         {
                             ordering.Expression = memberExpressionFromFalse;
                         }

@@ -170,21 +170,6 @@ namespace Marten.Linq.SqlGeneration
         {
             if (Orderings.Any())
             {
-                foreach (var ordering in Orderings)
-                {
-                    var orderingExpression = ordering.Ordering.Expression;
-                    if (orderingExpression is ConditionalExpression conditionalExpression)
-                    {
-                        if (conditionalExpression.IfTrue is MemberExpression memberExpressionFromTrue)
-                        {
-                            orderingExpression = memberExpressionFromTrue;
-                        }
-                        else if (conditionalExpression.IfTrue is MemberExpression memberExpressionFromFalse)
-                        {
-                            orderingExpression = memberExpressionFromFalse;
-                        }
-                    }
-                }
                 sql.Append(" order by ");
                 writeOrderByFragment(sql, Orderings[0].Ordering, Orderings[0].CaseInsensitive);
                 for (var i = 1; i < Orderings.Count; i++)
